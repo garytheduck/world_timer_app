@@ -17,7 +17,6 @@ class _LoadingState extends State<Loading> {
   Future<void> setupWorldTime() async {
     WorldTime instance = WorldTime(location: 'Berlin', flag: 'germany.png', url: 'Europe/Berlin');
     await instance.getTime();
-    Timer(const Duration(seconds: 3), (){});
     Navigator.pushReplacementNamed(context, '/home', arguments: {
       'location': instance.location,
       'flag': instance.flag,
