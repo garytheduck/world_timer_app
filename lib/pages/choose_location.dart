@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../services/weather_model.dart';
 import '../services/world_time.dart';
 
 class Location extends StatefulWidget {
@@ -10,7 +11,6 @@ class Location extends StatefulWidget {
 }
 
 class _LocationState extends State<Location> {
-
   List<WorldTime> locations = [
     WorldTime(url: 'Europe/London', location: 'London', flag: 'uk.png'),
     WorldTime(url: 'Europe/Berlin', location: 'Athens', flag: 'greece.png'),
@@ -38,13 +38,28 @@ class _LocationState extends State<Location> {
     WorldTime(url: 'Pacific/Fiji', location: 'Fiji', flag: 'fiji.png'),
     WorldTime(url: 'Europe/Bucharest', location: 'Bucharest', flag: 'bucharest.png'),
   ];
-
-  void updateTime(index) async {
+  List<String> locationsTemp = [
+    "London", "Athens", "Cairo", "Nairobi", "Chicago", "New York", "Seoul", "Jakarta", "Los_Angeles", "Mexico_City", "Accra", "El_Salvador", "Puerto_Rico", "Beirut", "Damascus", "Hong_Kong", "Jerusalem", "Tokyo", "Kiev", "Madrid", "Moscow", "Rome", "Honolulu",
+    "Fiji",
+    "Bucharest"
+  ];
+  void updateTimeandTemp(index) async {
     WorldTime instance = locations[index];
     await instance.getTime();
+    WeatherModel weatherModel = WeatherModel();
+    late  int temperature;
+
+    var weatherData = await weatherModel.getLocationWeather(locationsTemp[index]);
+    print(weatherData);
+    setState(() {
+      double temp = weatherData['main']['temp'];
+      temperature = temp.toInt();
+    });
+    print('TEMPERATURAAAAA : $temperature');
     //navigate to home screen
-    Navigator.pop(context, {
+    Navigator.pushReplacementNamed(context, '/home', arguments: {
       'location': instance.location,
+      'temperature': temperature,
       'flag': instance.flag,
       'time': instance.time,
       'isDayTime': instance.isDayTime,
@@ -70,7 +85,7 @@ class _LocationState extends State<Location> {
               child: Card(
                 child: ListTile(
                   onTap: () {
-                    updateTime(index);
+                    updateTimeandTemp(index);
                   },
                   title: Text(locations[index].location),
                   leading: CircleAvatar(

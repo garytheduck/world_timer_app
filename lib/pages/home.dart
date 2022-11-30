@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:world_timer_app/services/weather_model.dart';
 
 
 class Home extends StatefulWidget {
@@ -11,13 +12,19 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   Map data = {};
+  late int temperature;
+
+  WeatherModel weatherModel = WeatherModel();
+  void initState(){
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
 
     data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map;
     print(data);
-
+    print(ModalRoute.of(context)?.settings.arguments as Map);
     //set background
     String bgImage = data['isDayTime'] ? 'day.jpg' : 'night.jpg';
     Color bgColor = data['isDayTime'] ? Colors.blue : Colors.indigoAccent;
@@ -74,14 +81,23 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 10.0),
               Text(
                 data['time'],
-
                 style: TextStyle(
                   fontSize: 70.0,
                   color: timeColor,
                   letterSpacing: 4.0,
+                  fontFamily: 'BebasNeue',
+                ),
+              ),
+              const SizedBox(height: 10.0),
+              Text(
+                  data['temperature'].toString(),
+                style: TextStyle(
+                  fontSize: 50.0,
+                  letterSpacing: 6.0,
+                  color: locationColor,
                   fontFamily: 'BebasNeue',
                 ),
               ),
